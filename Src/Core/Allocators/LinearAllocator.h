@@ -1,5 +1,6 @@
 #pragma once
 #include "Allocator.h"
+#include "Core/Assertion.h"
 
 // Linear burn-through Allocator
 // Every new allocation simply increases the offset within the buffer by the desired number of bytes

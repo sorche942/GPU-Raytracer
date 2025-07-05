@@ -22,11 +22,12 @@ namespace CUDAMemory {
 	struct Ptr {
 		CUdeviceptr ptr;
 
-		Ptr()                : ptr(NULL) { }
+		Ptr()                : ptr(0) { }
 		Ptr(CUdeviceptr ptr) : ptr(ptr)  { }
+		Ptr(const Ptr& other) : ptr(other.ptr) { }
 
 		void operator=(Ptr other) {
-			if (ptr != NULL) {
+			if (ptr != 0) {
 				IO::print("WARNING: CUDA memory leak detected!\n"_sv);
 				DEBUG_BREAK();
 			}
@@ -82,7 +83,7 @@ namespace CUDAMemory {
 	inline void free(Ptr<T> & ptr) {
 		ASSERT(ptr.ptr);
 		CUDACALL(cuMemFree(ptr.ptr));
-		ptr.ptr = NULL;
+		ptr.ptr = 0;
 	}
 
 	template<typename T>

@@ -25,7 +25,11 @@ void PPMExporter::save(const String & filename, int pitch, int width, int height
 
 	// Based on: https://rosettacode.org/wiki/Bitmap/Write_a_PPM_file
 	FILE * file = nullptr;
+#ifdef _WIN32
 	fopen_s(&file, filename.data(), "wb");
+#else
+	file = fopen(filename.data(), "wb");
+#endif
 
 	if (!file) {
 		IO::print("PPMExporter: Failed to export '{}'!\n"_sv, filename);

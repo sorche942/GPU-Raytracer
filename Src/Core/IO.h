@@ -35,7 +35,7 @@ namespace IO {
 	template<typename ... Args>
 	inline void print(StringView fmt, const Args & ... args) {
 		LinearAllocator<KILOBYTES(4)> allocator;
-		String string = Format(&allocator).format(fmt, args ...);
+		String string = Format(static_cast<Allocator*>(&allocator)).format(fmt, args ...);
 		print(string.view());
 	}
 

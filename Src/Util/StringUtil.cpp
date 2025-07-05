@@ -1,5 +1,6 @@
 #include "StringUtil.h"
 
+#include <cmath>
 #include "Core/Assertion.h"
 #include "Core/StringView.h"
 
@@ -148,17 +149,17 @@ String Util::to_string(uint64_t value, uint64_t base, Allocator * allocator) {
 }
 
 String Util::to_string(double value, Allocator * allocator) {
-	if (isinf(value)) {
+	if (std::isinf(value)) {
 		return String(value > 0.0f ? "inf"_sv : "-inf"_sv, allocator);
 	}
-	if (isnan(value)) {
+	if (std::isnan(value)) {
 		return String("nan"_sv, allocator);
 	}
 
 	// Based on: https://github.com/antongus/stm32tpl/blob/master/ftoa.c
 
 	int integer_part = int(value);
-	value = value - floor(value);
+	value = value - std::floor(value);
 
 	static constexpr size_t MAX_PRECISION = 10;
 	static constexpr double rounders[MAX_PRECISION + 1] = {
@@ -187,7 +188,7 @@ String Util::to_string(double value, Allocator * allocator) {
 	while (precision--) {
 		value *= 10.0;
 		buf[offset++] = '0' + char(value);
-		value = value - floor(value);
+		value = value - std::floor(value);
 	}
 
 	return String(buf, offset, allocator);

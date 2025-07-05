@@ -2,7 +2,7 @@
 
 #include <cstring>
 
-#include <SDL2/SDL_Mouse.h>
+#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_keyboard.h>
 
 #define KEY_TABLE_SIZE SDL_NUM_SCANCODES

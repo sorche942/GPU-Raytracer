@@ -49,7 +49,11 @@ bool PerfTest::frame_end(float frame_time) {
 			index_pov = 0;
 
 			FILE * file = nullptr;
+#ifdef _WIN32
 			fopen_s(&file, output_file, "wb");
+#else
+			file = fopen(output_file, "wb");
+#endif
 
 			if (file == nullptr) IO::exit(1);
 
@@ -67,18 +71,18 @@ bool PerfTest::frame_end(float frame_time) {
 				float avg = sum            / float(BUFFER_SIZE);
 				float var = sum_of_squares / float(BUFFER_SIZE) - avg*avg;
 
-				fprintf_s(file, "POV %i: avg=%f, stddev=%f\n", i, avg, sqrtf(var));
+				fprintf(file, "POV %i: avg=%f, stddev=%f\n", i, avg, sqrtf(var));
 			}
 
-			fprintf_s(file, "\n");
+			fprintf(file, "\n");
 
 			for (int i = 0; i < (*povs).size(); i++) {
 				const POV & pov = (*povs)[i];
 
-				fprintf_s(file, "POV %i:\n", i);
+				fprintf(file, "POV %i:\n", i);
 
 				for (int j = 0; j < BUFFER_SIZE; j++) {
-					fprintf_s(file, "%f\n", pov.timings[j]);
+					fprintf(file, "%f\n", pov.timings[j]);
 				}
 			}
 

@@ -2,6 +2,8 @@
 
 #include <thread>
 #include <mutex>
+#include <condition_variable>
+#include <atomic>
 
 #include "Core/Array.h"
 #include "Core/Queue.h"

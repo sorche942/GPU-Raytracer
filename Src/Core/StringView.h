@@ -10,7 +10,7 @@ struct StringView {
 	inline char operator[](size_t index) const { return start[index]; }
 
 	const char * data() const { return start; }
-	size_t       size() const { return end - start; }
+	constexpr size_t size() const { return end - start; }
 
 	bool is_empty() const { return size() == 0; }
 
