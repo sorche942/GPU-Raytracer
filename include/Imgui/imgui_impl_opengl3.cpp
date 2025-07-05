@@ -127,8 +127,13 @@ bool    ImGui_ImplOpenGL3_Init(const char* glsl_version)
         glsl_version = "#version 130";
 #endif
     IM_ASSERT((int)strlen(glsl_version) + 2 < IM_ARRAYSIZE(g_GlslVersionString));
+#ifdef _WIN32
     strcpy_s(g_GlslVersionString, glsl_version);
     strcat_s(g_GlslVersionString, "\n");
+#else
+    strcpy(g_GlslVersionString, glsl_version);
+    strcat(g_GlslVersionString, "\n");
+#endif
 
     // Make a dummy GL call (we don't actually need the result)
     // IF YOU GET A CRASH HERE: it probably means that you haven't initialized the OpenGL function loader used by this code.
@@ -411,7 +416,11 @@ bool    ImGui_ImplOpenGL3_CreateDeviceObjects()
 
     // Parse GLSL version string
     int glsl_version = 130;
+#ifdef _WIN32
     sscanf_s(g_GlslVersionString, "#version %d", &glsl_version);
+#else
+    sscanf(g_GlslVersionString, "#version %d", &glsl_version);
+#endif
 
     const GLchar* vertex_shader_glsl_120 =
         "uniform mat4 ProjMtx;\n"
