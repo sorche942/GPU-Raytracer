@@ -96,20 +96,28 @@ file(GLOB IMGUI_SOURCES
 )
 list(APPEND SOURCES ${IMGUI_SOURCES})
 
-# Add miniz
-list(APPEND SOURCES ${CMAKE_SOURCE_DIR}/include/miniz/miniz.c)
+# Find system miniz package
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(MINIZ REQUIRED miniz)
 
 # Create executable
 add_executable(pathtracer ${SOURCES})
+
+# Add miniz include directories
+target_include_directories(pathtracer PRIVATE ${MINIZ_INCLUDE_DIRS})
+target_compile_options(pathtracer PRIVATE ${MINIZ_CFLAGS_OTHER})
 
 # Set CUDA architectures (adjust based on your GPU)
 set_property(TARGET pathtracer PROPERTY CUDA_ARCHITECTURES 60 61 70 75 80 86)
 
 # Link libraries
 target_link_libraries(pathtracer
+    ${MINIZ_LIBRARIES}
     ${CUDA_LIBRARIES}
     ${CUDA_cudart_static_LIBRARY}
     ${CUDA_nvrtc_LIBRARY}
+    /opt/cuda/lib64/libnvrtc.so
+    cuda
     ${OPENGL_LIBRARIES}
     ${SDL2_LIBRARIES}
     ${GLEW_LIBRARIES}
