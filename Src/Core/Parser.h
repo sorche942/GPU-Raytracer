@@ -1,6 +1,8 @@
 #pragma once
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+#include <cmath>
 
 #include "IO.h"
 #include "StringView.h"
@@ -16,13 +18,13 @@
 
 #define WARNING(loc, msg, ...) \
 	if (loc.file.size() > 0) { \
-		IO::print("{}:{}:{}: " msg ""_sv, loc.file, loc.line, loc.col, __VA_ARGS__); \
+		IO::print("{}:{}:{}: " msg ""_sv, loc.file, loc.line, loc.col, ##__VA_ARGS__); \
 	} else { \
-		IO::print(msg ""_sv, __VA_ARGS__); \
+		IO::print(msg ""_sv, ##__VA_ARGS__); \
 	}
 
 #define ERROR(loc, msg, ...) \
-	WARNING(loc, msg, __VA_ARGS__); \
+	WARNING(loc, msg, ##__VA_ARGS__); \
 	IO::exit(1);
 
 inline bool is_digit(char c) {

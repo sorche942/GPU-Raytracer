@@ -3,6 +3,17 @@
 
 #include "Core/IO.h"
 
+// Platform-specific debug break
+#ifdef _WIN32
+    #include <intrin.h>
+    #define DEBUG_BREAK() __debugbreak()
+#elif defined(__GNUC__) || defined(__clang__)
+    #include <signal.h>
+    #define DEBUG_BREAK() raise(SIGTRAP)
+#else
+    #define DEBUG_BREAK() abort()
+#endif
+
 #define CHECK_CUDA_CALLS true
 
 #if CHECK_CUDA_CALLS
@@ -17,7 +28,7 @@ inline void check_cuda_call(CUresult result, const char * file, int line) {
 		cuGetErrorString(result, &error_string);
 
 		IO::print("{}:{}: CUDA call failed with error {}!\n{}\n"_sv, file, line, error_name, error_string);
-		__debugbreak();
+		DEBUG_BREAK();
 	}
 }
 #else

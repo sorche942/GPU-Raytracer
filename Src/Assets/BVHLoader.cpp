@@ -37,7 +37,13 @@ bool BVHLoader::try_to_load(const String & filename, const String & bvh_filename
 	}
 
 	FILE * file = nullptr;
-	errno_t err = fopen_s(&file, bvh_filename.c_str(), "rb");
+	errno_t err;
+#ifdef _WIN32
+	err = fopen_s(&file, bvh_filename.c_str(), "rb");
+#else
+	file = fopen(bvh_filename.c_str(), "rb");
+	err = errno;
+#endif
 
 	if (!file) {
 		IO::print("WARNING: Failed to open BVH file '{}'! ({})\n"_sv, bvh_filename, IO::get_error_message(err));
@@ -110,7 +116,12 @@ bool BVHLoader::try_to_load(const String & filename, const String & bvh_filename
 			do {
 				if (state->cur_in == state->end_in) {
 					// No more input data left in buffer, go read some more from the file
-					size_t num_bytes = fread_s(state->buffer_in, sizeof(state->buffer_in), sizeof(mz_uint8), sizeof(state->buffer_in), file);
+					size_t num_bytes;
+#ifdef _WIN32
+					num_bytes = fread_s(state->buffer_in, sizeof(state->buffer_in), sizeof(mz_uint8), sizeof(state->buffer_in), file);
+#else
+					num_bytes = fread(state->buffer_in, sizeof(mz_uint8), sizeof(state->buffer_in), file);
+#endif
 					if (num_bytes == 0) {
 						return false;
 					}
@@ -149,7 +160,12 @@ bool BVHLoader::try_to_load(const String & filename, const String & bvh_filename
 
 	bool success = false;
 
-	size_t header_read = fread_s(&header, sizeof(header), sizeof(BVHFileHeader), 1, file);
+	size_t header_read;
+#ifdef _WIN32
+	header_read = fread_s(&header, sizeof(header), sizeof(BVHFileHeader), 1, file);
+#else
+	header_read = fread(&header, sizeof(BVHFileHeader), 1, file);
+#endif
 	if (!header_read) {
 		IO::print("WARNING: Failed to read header of BVH file '{}'!\n"_sv, bvh_filename);
 		goto exit;
@@ -190,7 +206,13 @@ exit:
 
 bool BVHLoader::save(const String & bvh_filename, const MeshData & mesh_data, const BVH2 & bvh) {
 	FILE * file = nullptr;
-	errno_t err = fopen_s(&file, bvh_filename.data(), "wb");
+	errno_t err;
+#ifdef _WIN32
+	err = fopen_s(&file, bvh_filename.data(), "wb");
+#else
+	file = fopen(bvh_filename.data(), "wb");
+	err = errno;
+#endif
 
 	if (!file) {
 		IO::print("WARNING: Failed to open BVH file '{}' for writing! ({})\n"_sv, bvh_filename, IO::get_error_message(err));
@@ -215,6 +237,14 @@ bool BVHLoader::save(const String & bvh_filename, const MeshData & mesh_data, co
 
 	tdefl_compressor compressor = { };
 	bool success = false;
+	
+	// Declare variables before any goto statements to avoid crossing initialization
+	tdefl_put_buf_func_ptr file_append_compressed_data = [](const void * buf, int len, void * user) -> mz_bool {
+		size_t bytes_written = fwrite(buf, sizeof(char), len, reinterpret_cast<FILE *>(user));
+		return bytes_written == len;
+	};
+	constexpr static int NUM_PROBES = 256;
+	tdefl_status status;
 
 	size_t header_written = fwrite(&header, sizeof(header), 1, file);
 	if (!header_written) {
@@ -222,13 +252,7 @@ bool BVHLoader::save(const String & bvh_filename, const MeshData & mesh_data, co
 		goto exit;
 	}
 
-	tdefl_put_buf_func_ptr file_append_compressed_data = [](const void * buf, int len, void * user) -> mz_bool {
-		size_t bytes_written = fwrite(buf, sizeof(char), len, reinterpret_cast<FILE *>(user));
-		return bytes_written == len;
-	};
-
-	constexpr static int NUM_PROBES = 256;
-	tdefl_status status = tdefl_init(&compressor, file_append_compressed_data, file, NUM_PROBES);
+	status = tdefl_init(&compressor, file_append_compressed_data, file, NUM_PROBES);
 	if (status != TDEFL_STATUS_OKAY) {
 		IO::print("WARNING: Failed to initialize compressor for BVH file '{}'!\n"_sv, bvh_filename);
 		goto exit;

@@ -5,6 +5,17 @@
 #include <nvrtc.h>
 
 #include "Core/Assertion.h"
+
+// Platform-specific debug break
+#ifdef _WIN32
+    #include <intrin.h>
+    #define DEBUG_BREAK() __debugbreak()
+#elif defined(__GNUC__) || defined(__clang__)
+    #include <signal.h>
+    #define DEBUG_BREAK() raise(SIGTRAP)
+#else
+    #define DEBUG_BREAK() abort()
+#endif
 #include "Core/IO.h"
 #include "Core/Parser.h"
 #include "Core/Timer.h"
@@ -21,7 +32,7 @@
 static void check_nvrtc_call(nvrtcResult result, const char * file, int line) {
 	if (result != NVRTC_SUCCESS) {
 		IO::print("{}:{}: NVRTC call failed with error {}!\n"_sv, file, line, nvrtcGetErrorString(result));
-		__debugbreak();
+		DEBUG_BREAK();
 	}
 }
 
@@ -173,7 +184,7 @@ void CUDAModule::init(const String & module_name, const String & filename, int c
 			}
 
 			if (result == NVRTC_SUCCESS) break;
-			__debugbreak(); // Compile error
+			DEBUG_BREAK(); // Compile error
 
 			// Reload file and try again
 			allocator.reset();
@@ -194,7 +205,7 @@ void CUDAModule::init(const String & module_name, const String & filename, int c
 	}
 
 	char log_buffer[8192];
-	log_buffer[0] = NULL;
+	log_buffer[0] = '\0';
 
 	CUjit_option options[] = {
 		CU_JIT_MAX_REGISTERS,

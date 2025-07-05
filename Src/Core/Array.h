@@ -4,6 +4,7 @@
 #include <new>
 #include <utility>
 #include <initializer_list>
+#include <algorithm>
 
 #include "Assertion.h"
 #include "Allocators/Allocator.h"

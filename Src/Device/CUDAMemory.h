@@ -5,6 +5,17 @@
 #include "Core/Assertion.h"
 #include "Core/IO.h"
 
+// Platform-specific debug break
+#ifdef _WIN32
+    #include <intrin.h>
+    #define DEBUG_BREAK() __debugbreak()
+#elif defined(__GNUC__) || defined(__clang__)
+    #include <signal.h>
+    #define DEBUG_BREAK() raise(SIGTRAP)
+#else
+    #define DEBUG_BREAK() abort()
+#endif
+
 namespace CUDAMemory {
 	// Type safe device pointer wrapper
 	template<typename T>
@@ -17,7 +28,7 @@ namespace CUDAMemory {
 		void operator=(Ptr other) {
 			if (ptr != NULL) {
 				IO::print("WARNING: CUDA memory leak detected!\n"_sv);
-				__debugbreak();
+				DEBUG_BREAK();
 			}
 			ptr = other.ptr;
 		}

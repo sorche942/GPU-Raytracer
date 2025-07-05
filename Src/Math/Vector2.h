@@ -27,7 +27,7 @@ struct Vector2 {
 
 	template<typename Func>
 	inline static Vector2 apply(const Vector2 & v, const Func & f = { }) {
-		return Vector2(f(v.x), f(v.y), f(v.z));
+		return Vector2(f(v.x), f(v.y));
 	}
 
 	inline Vector2 operator+=(const Vector2 & vector) { x += vector.x; y += vector.y; return *this; }

@@ -6,6 +6,17 @@
 #include "Core/IO.h"
 #include "Util.h"
 
+// Platform-specific debug break
+#ifdef _WIN32
+    #include <intrin.h>
+    #define DEBUG_BREAK() __debugbreak()
+#elif defined(__GNUC__) || defined(__clang__)
+    #include <signal.h>
+    #define DEBUG_BREAK() raise(SIGTRAP)
+#else
+    #define DEBUG_BREAK() abort()
+#endif
+
 static GLuint load_shader(StringView source, GLuint shader_type) {
 	GLuint shader = glCreateShader(shader_type);
 
@@ -20,7 +31,7 @@ static GLuint load_shader(StringView source, GLuint shader_type) {
 		glGetShaderInfoLog(shader, sizeof(info_log), nullptr, info_log);
 
 		IO::print("Error compiling shader type {}: '{}'\n"_sv, shader_type, info_log);
- 		__debugbreak();
+ 		DEBUG_BREAK();
 	}
 
 	return shader;
@@ -51,7 +62,7 @@ Shader Shader::load(StringView source_vertex, StringView source_fragment) {
 		glGetProgramInfoLog(shader.program_id, sizeof(info_log), nullptr, info_log);
 
 		IO::print("Error linking shader program: '{}'\n"_sv, info_log);
-		__debugbreak();
+		DEBUG_BREAK();
 	}
 
 	// Validate Program
@@ -65,7 +76,7 @@ Shader Shader::load(StringView source_vertex, StringView source_fragment) {
 		glGetProgramInfoLog(shader.program_id, sizeof(info_log), nullptr, info_log);
 
 		IO::print("Error validating shader program: '{}'\n"_sv, info_log);
-		__debugbreak();
+		DEBUG_BREAK();
 	}
 
 	return shader;

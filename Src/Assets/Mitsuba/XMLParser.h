@@ -24,70 +24,71 @@ struct XMLAttribute {
 	SourceLocation location_of_value;
 
 	template<typename T> T get_value() const;
-
-	template<>
-	StringView get_value() const {
-		return value;
-	}
-
-	template<>
-	int get_value() const {
-		Parser parser(value, location_of_value);
-		return parser.parse_int();
-	}
-
-	template<>
-	float get_value() const {
-		Parser parser(value, location_of_value);
-		return parser.parse_float();
-	}
-
-	template<>
-	bool get_value() const {
-		if (value == "true")  return true;
-		if (value == "false") return false;
-		ERROR(location_of_value, "Unable to parse '{}' as boolean!\n", value);
-	}
-
-	template<>
-	Vector3 get_value() const {
-		Parser parser(value, location_of_value);
-		parser_skip_xml_whitespace(parser);
-
-		Vector3 v;
-		v.x = parser.parse_float();
-
-		bool uses_comma = parser.match(',');
-		parser_skip_xml_whitespace(parser);
-
-		if (!parser.reached_end()) {
-			v.y = parser.parse_float();
-
-			if (uses_comma) parser.expect(',');
-			parser_skip_xml_whitespace(parser);
-
-			v.z = parser.parse_float();
-		} else {
-			v.y = v.x;
-			v.z = v.x;
-		}
-
-		return v;
-	}
-
-	template<>
-	Matrix4 get_value() const {
-		Parser parser(value, location_of_value);
-
-		Matrix4 m;
-		for (int i = 0; i < 16; i++) {
-			parser_skip_xml_whitespace(parser);
-			m.cells[i] = parser.parse_float();
-		}
-
-		return m;
-	}
 };
+
+// Template specializations must be outside the struct
+template<>
+inline StringView XMLAttribute::get_value<StringView>() const {
+	return value;
+}
+
+template<>
+inline int XMLAttribute::get_value<int>() const {
+	Parser parser(value, location_of_value);
+	return parser.parse_int();
+}
+
+template<>
+inline float XMLAttribute::get_value<float>() const {
+	Parser parser(value, location_of_value);
+	return parser.parse_float();
+}
+
+template<>
+inline bool XMLAttribute::get_value<bool>() const {
+	if (value == "true")  return true;
+	if (value == "false") return false;
+	ERROR(location_of_value, "Unable to parse '{}' as boolean!\n", value);
+}
+
+template<>
+inline Vector3 XMLAttribute::get_value<Vector3>() const {
+	Parser parser(value, location_of_value);
+	parser_skip_xml_whitespace(parser);
+
+	Vector3 v;
+	v.x = parser.parse_float();
+
+	bool uses_comma = parser.match(',');
+	parser_skip_xml_whitespace(parser);
+
+	if (!parser.reached_end()) {
+		v.y = parser.parse_float();
+
+		if (uses_comma) parser.expect(',');
+		parser_skip_xml_whitespace(parser);
+
+		v.z = parser.parse_float();
+	} else {
+		v.y = v.x;
+		v.z = v.x;
+	}
+
+	return v;
+}
+
+template<>
+inline Matrix4 XMLAttribute::get_value<Matrix4>() const {
+	Parser parser(value, location_of_value);
+
+	Matrix4 m;
+	for (int i = 0; i < 16; i++) {
+		parser_skip_xml_whitespace(parser);
+		m.cells[i] = parser.parse_float();
+	}
+
+	return m;
+}
 
 struct XMLNode {
 	StringView tag;

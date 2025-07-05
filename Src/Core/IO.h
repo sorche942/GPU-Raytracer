@@ -4,6 +4,25 @@
 #include "Format.h"
 #include "Allocators/LinearAllocator.h"
 
+// Platform-specific types and includes
+#ifdef _WIN32
+    typedef int errno_t;
+#else
+    #include <errno.h>
+    typedef int errno_t;
+#endif
+
+// Platform-specific debug break (imported from Assertion.h)
+#ifdef _WIN32
+    #include <intrin.h>
+    #define DEBUG_BREAK() __debugbreak()
+#elif defined(__GNUC__) || defined(__clang__)
+    #include <signal.h>
+    #define DEBUG_BREAK() raise(SIGTRAP)
+#else
+    #define DEBUG_BREAK() abort()
+#endif
+
 namespace IO {
 	inline void print(char c) {
 		putchar(c);
@@ -22,7 +41,7 @@ namespace IO {
 
 	[[noreturn]]
 	inline void exit(int code) {
-		__debugbreak();
+		DEBUG_BREAK();
 		::exit(code);
 	}
 
