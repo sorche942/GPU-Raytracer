@@ -1,0 +1,122 @@
+cmake_minimum_required(VERSION 3.18)
+project(GPUPathtracer LANGUAGES CXX CUDA)
+
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Set CUDA standard
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
+# Find required packages
+find_package(CUDA REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(Threads REQUIRED)
+
+# Find SDL2 and GLEW (prefer system packages on Linux)
+find_package(SDL2 QUIET)
+find_package(GLEW QUIET)
+
+# If not found, use the included versions
+if(NOT SDL2_FOUND)
+    set(SDL2_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include/SDL2)
+    set(SDL2_LIBRARIES SDL2 SDL2main)
+    link_directories(${CMAKE_SOURCE_DIR}/lib)
+endif()
+
+if(NOT GLEW_FOUND)
+    set(GLEW_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include/GL)
+    set(GLEW_LIBRARIES GLEW glew32s)
+    link_directories(${CMAKE_SOURCE_DIR}/lib)
+endif()
+
+# Set include directories
+include_directories(
+    ${CMAKE_SOURCE_DIR}/Src
+    ${CMAKE_SOURCE_DIR}/include
+    ${CUDA_INCLUDE_DIRS}
+    ${SDL2_INCLUDE_DIRS}
+    ${GLEW_INCLUDE_DIRS}
+    ${OPENGL_INCLUDE_DIRS}
+)
+
+# Compiler flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -march=native -ffast-math")
+
+# Platform-specific definitions
+if(WIN32)
+    add_definitions(-DNOMINMAX)
+else()
+    # Linux-specific flags
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+endif()
+
+# Collect source files
+file(GLOB_RECURSE SOURCES 
+    ${CMAKE_SOURCE_DIR}/Src/*.cpp
+    ${CMAKE_SOURCE_DIR}/Src/*.c
+)
+
+# Add ImGui sources
+file(GLOB IMGUI_SOURCES
+    ${CMAKE_SOURCE_DIR}/include/Imgui/*.cpp
+)
+list(APPEND SOURCES ${IMGUI_SOURCES})
+
+# Add miniz
+list(APPEND SOURCES ${CMAKE_SOURCE_DIR}/include/miniz/miniz.c)
+
+# Create executable
+add_executable(pathtracer ${SOURCES})
+
+# Set CUDA architectures (adjust based on your GPU)
+set_property(TARGET pathtracer PROPERTY CUDA_ARCHITECTURES 60 61 70 75 80 86)
+
+# Link libraries
+target_link_libraries(pathtracer
+    ${CUDA_LIBRARIES}
+    ${CUDA_cudart_static_LIBRARY}
+    ${CUDA_nvrtc_LIBRARY}
+    ${OPENGL_LIBRARIES}
+    ${SDL2_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${CMAKE_DL_LIBS}
+    ${CMAKE_THREAD_LIBS_INIT}
+    m
+)
+
+# On Linux, we might need to link against specific libraries
+if(UNIX AND NOT APPLE)
+    target_link_libraries(pathtracer
+        GL
+        X11
+        Xxf86vm
+        Xrandr
+        pthread
+        Xi
+        Xinerama
+        Xcursor
+    )
+endif()
+
+# Copy any required runtime files
+if(EXISTS ${CMAKE_SOURCE_DIR}/Data)
+    file(COPY ${CMAKE_SOURCE_DIR}/Data DESTINATION ${CMAKE_BINARY_DIR})
+endif()
+
+# Set output directory
+set_target_properties(pathtracer PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}
+)
+
+# Print configuration
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "C++ compiler: ${CMAKE_CXX_COMPILER}")
+message(STATUS "CUDA compiler: ${CMAKE_CUDA_COMPILER}")
+message(STATUS "CUDA version: ${CUDA_VERSION}")

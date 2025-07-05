@@ -22,7 +22,9 @@
 #include "Util/Util.h"
 #include "Util/PerfTest.h"
 
+#ifdef _WIN32
 extern "C" { _declspec(dllexport) unsigned NvOptimusEnablement = true; } // Forces NVIDIA driver to be used
+#endif
 
 static constexpr int FRAMETIME_HISTORY_LENGTH = 100;
 
