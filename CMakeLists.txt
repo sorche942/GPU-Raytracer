@@ -7,8 +7,16 @@ if(UNIX AND NOT APPLE)
     
     foreach(GCC_VERSION ${CUDA_COMPATIBLE_GCC_VERSIONS})
         find_program(COMPATIBLE_GCC_PATH ${GCC_VERSION})
-        if(COMPATIBLE_GCC_PATH)
+        # Convert gcc-14 to g++-14
+        string(REPLACE "gcc" "g++" GXX_VERSION ${GCC_VERSION})
+        find_program(COMPATIBLE_GXX_PATH ${GXX_VERSION})
+        if(COMPATIBLE_GCC_PATH AND COMPATIBLE_GXX_PATH)
             message(STATUS "Found compatible GCC for CUDA: ${COMPATIBLE_GCC_PATH}")
+            message(STATUS "Found compatible G++ for CUDA: ${COMPATIBLE_GXX_PATH}")
+            
+            # Set both C and C++ compilers to use the compatible versions
+            set(CMAKE_C_COMPILER ${COMPATIBLE_GCC_PATH})
+            set(CMAKE_CXX_COMPILER ${COMPATIBLE_GXX_PATH})
             set(CMAKE_CUDA_HOST_COMPILER ${COMPATIBLE_GCC_PATH})
             break()
         endif()

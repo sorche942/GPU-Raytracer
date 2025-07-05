@@ -44,7 +44,11 @@ if [ "$FOUND_COMPATIBLE_GCC" = false ]; then
     echo -e "${YELLOW}Continuing with system GCC...${NC}"
 fi
 
-# Create build directory
+# Create build directory (clean if exists to avoid cmake cache issues)
+if [ -d "build" ]; then
+    echo -e "${YELLOW}Cleaning previous build directory...${NC}"
+    rm -rf build
+fi
 mkdir -p build
 cd build
 
