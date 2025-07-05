@@ -22,6 +22,28 @@ fi
 
 echo -e "${GREEN}Using CUDA from: $CUDA_PATH${NC}"
 
+# Check for compatible GCC versions for CUDA
+echo -e "${YELLOW}Checking for CUDA-compatible GCC versions...${NC}"
+COMPATIBLE_GCC_VERSIONS=("gcc-14" "gcc-13" "gcc-12" "gcc-11")
+FOUND_COMPATIBLE_GCC=false
+
+for GCC_VERSION in "${COMPATIBLE_GCC_VERSIONS[@]}"; do
+    if command -v $GCC_VERSION &> /dev/null; then
+        echo -e "${GREEN}Found compatible GCC: $GCC_VERSION${NC}"
+        FOUND_COMPATIBLE_GCC=true
+        break
+    fi
+done
+
+if [ "$FOUND_COMPATIBLE_GCC" = false ]; then
+    echo -e "${YELLOW}Warning: No CUDA-compatible GCC found (gcc-11 through gcc-14).${NC}"
+    echo -e "${YELLOW}Your system GCC version:${NC}"
+    gcc --version | head -1
+    echo -e "${YELLOW}CUDA 12.9 supports GCC versions 11-14. You may encounter compilation errors.${NC}"
+    echo -e "${YELLOW}To install GCC 14 on Arch Linux: sudo pacman -S gcc14${NC}"
+    echo -e "${YELLOW}Continuing with system GCC...${NC}"
+fi
+
 # Create build directory
 mkdir -p build
 cd build

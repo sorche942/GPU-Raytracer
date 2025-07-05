@@ -1,4 +1,25 @@
 cmake_minimum_required(VERSION 3.18)
+
+# Handle GCC version compatibility with CUDA
+if(UNIX AND NOT APPLE)
+    # Check for compatible GCC versions for CUDA
+    set(CUDA_COMPATIBLE_GCC_VERSIONS "gcc-14" "gcc-13" "gcc-12" "gcc-11")
+    
+    foreach(GCC_VERSION ${CUDA_COMPATIBLE_GCC_VERSIONS})
+        find_program(COMPATIBLE_GCC_PATH ${GCC_VERSION})
+        if(COMPATIBLE_GCC_PATH)
+            message(STATUS "Found compatible GCC for CUDA: ${COMPATIBLE_GCC_PATH}")
+            set(CMAKE_CUDA_HOST_COMPILER ${COMPATIBLE_GCC_PATH})
+            break()
+        endif()
+    endforeach()
+    
+    if(NOT CMAKE_CUDA_HOST_COMPILER)
+        message(WARNING "No compatible GCC found for CUDA. Trying system GCC...")
+        message(WARNING "If compilation fails, install gcc-14 or gcc-13: sudo pacman -S gcc14")
+    endif()
+endif()
+
 project(GPUPathtracer LANGUAGES CXX CUDA)
 
 # Set C++ standard
@@ -119,4 +140,5 @@ set_target_properties(pathtracer PROPERTIES
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "C++ compiler: ${CMAKE_CXX_COMPILER}")
 message(STATUS "CUDA compiler: ${CMAKE_CUDA_COMPILER}")
+message(STATUS "CUDA host compiler: ${CMAKE_CUDA_HOST_COMPILER}")
 message(STATUS "CUDA version: ${CUDA_VERSION}")
