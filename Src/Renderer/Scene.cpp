@@ -31,7 +31,7 @@ Scene::Scene(Allocator * allocator) : allocator(allocator), asset_manager(alloca
 		} else if (file_extension == "ply") {
 			add_mesh(scene_filename, asset_manager.add_mesh_data(scene_filename, PLYLoader::load));
 		} else if (file_extension == "xml") {
-			MitsubaLoader::load(scene_filename, static_cast<Allocator*>(&load_allocator), *this);
+			MitsubaLoader::load(scene_filename, allocator, *this);
 		} else {
 			IO::print("ERROR: '{}' file format is not supported!\n"_sv, file_extension);
 			IO::exit(1);

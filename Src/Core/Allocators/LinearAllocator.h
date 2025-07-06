@@ -36,12 +36,16 @@ struct LinearAllocator final : Allocator {
 
 private:
 	char * alloc(size_t num_bytes) override {
+		// Ensure alignment to 16 bytes for SIMD types
+		constexpr size_t alignment = 16;
+		size_t aligned_offset = (offset + alignment - 1) & ~(alignment - 1);
+		
 		if (num_bytes >= Size) {
 			return new char[num_bytes]; // Fall back to heap allocation
 		}
-		if (offset + num_bytes <= Size) {
-			char * result = data + offset;
-			offset += num_bytes;
+		if (aligned_offset + num_bytes <= Size) {
+			char * result = data + aligned_offset;
+			offset = aligned_offset + num_bytes;
 			return result;
 		} else if (!next) {
 			next = new LinearAllocator();
