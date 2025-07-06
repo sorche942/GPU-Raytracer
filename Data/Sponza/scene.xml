@@ -10,7 +10,7 @@
 	<bsdf type="twosided" id="Material__25">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\lion.tga"/>
+				<string name="filename" value="textures/lion.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -18,7 +18,7 @@
 	<bsdf type="twosided" id="Material__298">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\background.tga"/>
+				<string name="filename" value="textures/background.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -31,7 +31,7 @@
 	<bsdf type="twosided" id="Material__57">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\vase_plant.tga"/>
+				<string name="filename" value="textures/vase_plant.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -44,7 +44,7 @@
 	<bsdf type="twosided" id="arch">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_arch_diff.tga"/>
+				<string name="filename" value="textures/sponza_arch_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -52,7 +52,7 @@
 	<bsdf type="twosided" id="bricks">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\spnza_bricks_a_diff.tga"/>
+				<string name="filename" value="textures/spnza_bricks_a_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -60,7 +60,7 @@
 	<bsdf type="twosided" id="ceiling">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_ceiling_a_diff.tga"/>
+				<string name="filename" value="textures/sponza_ceiling_a_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -68,7 +68,7 @@
 	<bsdf type="twosided" id="chain">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\chain_texture.tga"/>
+				<string name="filename" value="textures/chain_texture.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -76,7 +76,7 @@
 	<bsdf type="twosided" id="column_a">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_column_a_diff.tga"/>
+				<string name="filename" value="textures/sponza_column_a_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -84,7 +84,7 @@
 	<bsdf type="twosided" id="column_b">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_column_b_diff.tga"/>
+				<string name="filename" value="textures/sponza_column_b_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -92,7 +92,7 @@
 	<bsdf type="twosided" id="column_c">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_column_c_diff.tga"/>
+				<string name="filename" value="textures/sponza_column_c_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -100,7 +100,7 @@
 	<bsdf type="twosided" id="details">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_details_diff.tga"/>
+				<string name="filename" value="textures/sponza_details_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -108,7 +108,7 @@
 	<bsdf type="twosided" id="fabric_a">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_fabric_diff.tga"/>
+				<string name="filename" value="textures/sponza_fabric_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -116,7 +116,7 @@
 	<bsdf type="twosided" id="fabric_c">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_curtain_diff.tga"/>
+				<string name="filename" value="textures/sponza_curtain_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -124,7 +124,7 @@
 	<bsdf type="twosided" id="fabric_d">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_fabric_blue_diff.tga"/>
+				<string name="filename" value="textures/sponza_fabric_blue_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -132,7 +132,7 @@
 	<bsdf type="twosided" id="fabric_e">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_fabric_green_diff.tga"/>
+				<string name="filename" value="textures/sponza_fabric_green_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -140,7 +140,7 @@
 	<bsdf type="twosided" id="fabric_f">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_curtain_green_diff.tga"/>
+				<string name="filename" value="textures/sponza_curtain_green_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -148,7 +148,7 @@
 	<bsdf type="twosided" id="fabric_g">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_curtain_blue_diff.tga"/>
+				<string name="filename" value="textures/sponza_curtain_blue_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -156,7 +156,7 @@
 	<bsdf type="twosided" id="flagpole">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_flagpole_diff.tga"/>
+				<string name="filename" value="textures/sponza_flagpole_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -164,7 +164,7 @@
 	<bsdf type="twosided" id="floor">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_floor_a_diff.tga"/>
+				<string name="filename" value="textures/sponza_floor_a_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -172,7 +172,7 @@
 	<bsdf type="twosided" id="leaf">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_thorn_diff.tga"/>
+				<string name="filename" value="textures/sponza_thorn_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -180,7 +180,7 @@
 	<bsdf type="twosided" id="roof">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\sponza_roof_diff.tga"/>
+				<string name="filename" value="textures/sponza_roof_diff.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -188,7 +188,7 @@
 	<bsdf type="twosided" id="vase">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\vase_dif.tga"/>
+				<string name="filename" value="textures/vase_dif.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -196,7 +196,7 @@
 	<bsdf type="twosided" id="vase_hanging">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\vase_hanging.tga"/>
+				<string name="filename" value="textures/vase_hanging.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
@@ -204,7 +204,7 @@
 	<bsdf type="twosided" id="vase_round">
 		<bsdf type="diffuse">
 			<texture name="reflectance" type="bitmap">
-				<string name="filename" value="textures\\vase_round.tga"/>
+				<string name="filename" value="textures/vase_round.tga"/>
 				<rgb name="scale" value="0.4704, 0.4704, 0.4704"/>
 			</texture>
 		</bsdf>
